@@ -10,57 +10,124 @@
 
 <div class="jumbotron text-center">
   <div class="container">
-    <a href="/" class="lang-logo">
-      <img src="/lang-logo.png">
-    </a>
-    <h1>Getting Started with Node on Heroku v1.0 dev branch</h1>
-    <p>This is a sample Node application deployed to Heroku. It's a reasonably simple app - but a good foundation for understanding how to get the most out of the Heroku platform.</p>
-    <a type="button" class="btn btn-lg btn-default" href="https://devcenter.heroku.com/articles/getting-started-with-nodejs"><span class="glyphicon glyphicon-flash"></span> Getting Started with Node</a>
-    <a type="button" class="btn btn-lg btn-primary" href="https://github.com/heroku/node-js-getting-started"><span class="glyphicon glyphicon-download"></span> Source on GitHub</a>
+    <h1>Scatter2CSV</h1>
+    <p>Generate 2D data in csv format from user's scatter plot</p>
   </div>
 </div>
 <div class="container">
-  <div class="alert alert-info text-center" role="alert">
-    To deploy your own copy, and learn the fundamentals of the Heroku platform, head over to the <a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs" class="alert-link">Getting Started with Node on Heroku</a> tutorial.
-  </div>
-  <hr>
   <div class="row">
     <div class="col-md-6">
-      <h3><span class="glyphicon glyphicon-info-sign"></span> How this sample app works</h3>
-      <ul>
-        <li>This app was deployed to Heroku, either using Git or by using <a href="https://github.com/heroku/node-js-getting-started">Heroku Button</a> on the repository.</li>
-
-        <li>When Heroku received the source code, it fetched all the dependencies in the <a href="https://github.com/heroku/node-js-getting-started/blob/master/package.json">package.json</a>, creating a deployable slug.</li>
-        <li>The platform then spins up a dyno, a lightweight container that provides an isolated environment in which the slug can be mounted and executed.</li>
-        <li>You can scale your app, manage it, and deploy over <a href="https://addons.heroku.com/">150 add-on services</a>, from the Dashboard or CLI.</li>
-      </ul>
+      <div id="plot-plane">
+      </div>
     </div>
     <div class="col-md-6">
-      <h3><span class="glyphicon glyphicon-link"></span> Next Steps</h3>
-      <ul>
-        <li>If you are following the <a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs">Getting Started</a> guide, then please head back to the tutorial and follow the next steps!</li>
-        <li>If you deployed this app by deploying the Heroku Button, then in a command line shell, run:</li>
-        <ul>
-          <li><code>git clone https://github.com/heroku/node-js-getting-started.git</code> - this will create a local copy of the source code for the app</li>
-          <li><code>cd node-js-getting-started</code> - change directory into the local source code repository</li>
-          <li><code>heroku git:remote -a &lt;your-app-name></code> - associate the Heroku app with the repository</li>
-          <li>You'll now be set up to run the app locally, or <a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs#push-local-changes">deploy changes</a> to Heroku</li>
-        </ul>
-      </ul>
-      <h3><span class="glyphicon glyphicon-link"></span> Helpful Links</h3>
-      <ul>
-        <li><a href="https://www.heroku.com/home">Heroku</a></li>
-        <li><a href="https://devcenter.heroku.com/">Heroku Dev Center</a></li>
-        <li><a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs">Getting Started with Node on Heroku</a></li>
-        <li><a href="https://devcenter.heroku.com/articles/deploying-nodejs">Deploying Node Apps on Heroku</a></li>
-      </ul>
+      <form>
+      <div class="row">
+        <div class="input-group">
+          <span class="input-group-addon">Range X Axis</span>
+          <input type="text" class="form-control" placeholder="Minimum X" id="min_x" value="0" autocomplete="off" />
+          <span class="input-group-addon">-</span>
+          <input type="text" class="form-control" placeholder="Maximum X" id="max_x" value="1" autocomplete="off" />
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="input-group">
+          <span class="input-group-addon">Range Y Axis</span>
+          <input type="text" class="form-control" placeholder="Minimum Y" id="min_y" value="0" autocomplete="off" />
+          <span class="input-group-addon">-</span>
+          <input type="text" class="form-control" placeholder="Maximum Y" id="max_y" value="1" autocomplete="off" />
+        </div>
+      </div><br>
+      <div class="row">
+        <button type="button" class="btn btn-success" onclick="change()">Change</button>
+        <button type="button" class="btn btn-primary" onclick="exportCSV()">Export CSV</button>
+      </div><br>
+      </form>
     </div>
   </div> <!-- row -->
-   <div class="alert alert-info text-center" role="alert">
-    Please do work through the Getting Started guide, even if you do know how to build such an application.  The guide covers the basics of working with Heroku, and will familiarize you with all the concepts you need in order to build and deploy your own apps.
-  </div>
+  <hr>
 </div>
 
+<script>
+
+var canvas;
+var coordinate = [];
+var plane_size = 400;//windowWidth/5;
+var range_x_min = 0;
+var range_x_max = 1;
+var range_y_min = 0;
+var range_y_max = 1;
+var scale_size = 10;
+    
+function setup() {
+  canvas = createCanvas(plane_size, plane_size);
+  canvas.parent('plot-plane');
+}
+    
+function draw() {
+  background(200);
+  stroke(0);
+  fill(0);
+  for(var i=0;i<=scale_size;i++){
+    var x_val = float(range_x_min) + float(((range_x_max - range_x_min)*i/scale_size));
+    textAlign(CENTER);
+    text(nfc(x_val,2), plane_size*i/scale_size, plane_size);
+  }
+  for(var i=0;i<=scale_size;i++){
+    var y_val = float(range_y_min) + float(((range_y_max - range_y_min)*i/scale_size));
+    textAlign(LEFT);
+    text(nfc(y_val,2), 0, plane_size - (plane_size*i/scale_size));
+  }
+  for(var i=0;i<coordinate.length;i++){
+    if(coordinate[i][2] == 0){
+      stroke(255,0,0);
+      fill(255,0,0);
+    } else {
+      stroke(0,0,255);
+      fill(0,0,255);
+    }
+    ellipse(coordinate[i][0],coordinate[i][1],5,5);
+  }
+}
+    
+function mousePressed(){
+  var class_name;
+  if(mouseButton == LEFT){
+    class_name = 0;
+  } else {
+    class_name = 1;
+  }
+  if(mouseX>=0 && mouseX<=plane_size && mouseY>=0 && mouseY<=plane_size){
+    var temp = [mouseX, mouseY, class_name];
+    coordinate.push(temp);
+  }
+}
+
+function change(){
+  range_x_min = document.getElementById("min_x").value;
+  range_x_max = document.getElementById("max_x").value;
+  range_y_min = document.getElementById("min_y").value;
+  range_y_max = document.getElementById("max_y").value;
+}
+
+function exportCSV(){
+  var csvContent = "data:text/csv;charset=utf-8,";
+  var data = [];
+  for(var i=0;i<coordinate.length;i++){
+    var x = coordinate[i][0] * (range_x_max - range_x_min) / plane_size ;
+    var y = (plane_size - coordinate[i][1]) * (range_y_max - range_y_min) / plane_size ;
+    var temp = [x, y, coordinate[i][2]];
+    data.push(temp);
+  }
+  data.forEach(function(infoArray, index){
+   dataString = infoArray.join(",");
+   csvContent += index < data.length ? dataString+ "\n" : dataString;
+  });
+  var encodedUri = encodeURI(csvContent);
+  window.open(encodedUri);
+}
+    
+</script>
 
 </body>
 </html>

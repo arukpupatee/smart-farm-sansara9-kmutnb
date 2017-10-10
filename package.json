@@ -1,7 +1,7 @@
 {
-  "name": "node-js-getting-started",
+  "name": "scatter-to-csv",
   "version": "0.2.6",
-  "description": "A sample Node.js app using Express 4",
+  "description": "Generate Data from Scatter Plot",
   "engines": {
     "node": "6.11.1"
   },
