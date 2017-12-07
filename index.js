@@ -29,7 +29,7 @@ app.get('/', function(req, res) {
 });
 
 app.get('/insert/temperature/:temperature', function(req, res) {
-  var timestamp = new Date()/1000;
+  var timestamp = Math.floor(new Date()/1000);
   var temperature = parseFloat(req.params.temperature);
   var sql = "INSERT INTO temperature VALUES ("+timestamp+", "+temperature+", 'temperature')";
   db.query(sql, function (err, result) {
@@ -39,7 +39,7 @@ app.get('/insert/temperature/:temperature', function(req, res) {
 });
 
 app.get('/insert/humidity/:humidity', function(req, res) {
-  var timestamp = new Date()/1000;
+  var timestamp = Math.floor(new Date()/1000);
   var humidity = parseFloat(req.params.humidity);
   var sql = "INSERT INTO humidity VALUES ("+timestamp+", "+humidity+", 'humidity')";
   db.query(sql, function (err, result) {
@@ -49,7 +49,7 @@ app.get('/insert/humidity/:humidity', function(req, res) {
 });
 
 app.get('/insert/brightness/:brightness', function(req, res) {
-  var timestamp = new Date()/1000;
+  var timestamp = Math.floor(new Date()/1000);
   var brightness = parseFloat(req.params.brightness);
   var sql = "INSERT INTO brightness VALUES ("+timestamp+", "+brightness+", 'brightness')";
   db.query(sql, function (err, result) {
@@ -60,7 +60,7 @@ app.get('/insert/brightness/:brightness', function(req, res) {
 
 
 app.get('/insert/:temperature/:humidity/:brightness', function(req, res) {
-  var timestamp = new Date()/1000;
+  var timestamp = Math.floor(new Date()/1000);
   var temperature = parseFloat(req.params.temperature);
   var humidity = parseFloat(req.params.humidity);
   var brightness = parseFloat(req.params.brightness);
