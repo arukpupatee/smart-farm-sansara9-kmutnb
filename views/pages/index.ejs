@@ -7,125 +7,26 @@
 <body>
 
   <% include ../partials/nav.ejs %>
-
-<div class="jumbotron text-center">
-  <div class="container">
-    <h1>Scatter2CSV</h1>
-    <p>Generate 2D data in csv format from user's scatter plot</p>
-  </div>
-</div>
-<div class="container">
-  <div class="row">
-    <div class="col-md-6">
-      <div id="plot-plane">
+  <div class="jumbotron">
+    <div class="container">
+      <div class="row align-items-center justify-content-center">
+        <div class="col-2"></div>
+        <div class="col-6">
+          <h1>สถานะการจ่ายน้ำ : <span style="color:#229e0c;">กำลังเปิดอยู่</span></h1>
+        </div>
+        <div class="col-4">
+          <button type="button" class="btn btn-success btn-lg">เปิด</button>
+          <button type="button" class="btn btn-danger btn-lg">ปิด</button>
+        </div>
+        <div class="col-2"></div>
+      </div>
+      <div class="row align-items-center justify-content-center">
+          <iframe src="http://localhost:3000/dashboard/db/smart-farm?orgId=1&from=1512287174000&to=1512317780306&theme=light" width="1300" height="650" frameborder="0"></iframe>
       </div>
     </div>
-    <div class="col-md-6">
-      <form>
-      <div class="row">
-        <div class="input-group">
-          <span class="input-group-addon">Range X Axis</span>
-          <input type="text" class="form-control" placeholder="Minimum X" id="min_x" value="0" autocomplete="off" />
-          <span class="input-group-addon">-</span>
-          <input type="text" class="form-control" placeholder="Maximum X" id="max_x" value="1" autocomplete="off" />
-        </div>
-      </div><br>
-      <div class="row">
-        <div class="input-group">
-          <span class="input-group-addon">Range Y Axis</span>
-          <input type="text" class="form-control" placeholder="Minimum Y" id="min_y" value="0" autocomplete="off" />
-          <span class="input-group-addon">-</span>
-          <input type="text" class="form-control" placeholder="Maximum Y" id="max_y" value="1" autocomplete="off" />
-        </div>
-      </div><br>
-      <div class="row">
-        <button type="button" class="btn btn-success" onclick="change()">Change</button>
-        <button type="button" class="btn btn-primary" onclick="exportCSV()">Export CSV</button>
-      </div><br>
-      </form>
-    </div>
-  </div> <!-- row -->
-  <hr>
-</div>
-
+  </div>
+  
 <script>
-
-var canvas;
-var coordinate = [];
-var plane_size = 400;//windowWidth/5;
-var range_x_min = 0;
-var range_x_max = 1;
-var range_y_min = 0;
-var range_y_max = 1;
-var scale_size = 10;
-    
-function setup() {
-  canvas = createCanvas(plane_size, plane_size);
-  canvas.parent('plot-plane');
-}
-    
-function draw() {
-  background(200);
-  stroke(0);
-  fill(0);
-  for(var i=0;i<=scale_size;i++){
-    var x_val = float(range_x_min) + float(((range_x_max - range_x_min)*i/scale_size));
-    textAlign(CENTER);
-    text(nfc(x_val,2), plane_size*i/scale_size, plane_size);
-  }
-  for(var i=0;i<=scale_size;i++){
-    var y_val = float(range_y_min) + float(((range_y_max - range_y_min)*i/scale_size));
-    textAlign(LEFT);
-    text(nfc(y_val,2), 0, plane_size - (plane_size*i/scale_size));
-  }
-  for(var i=0;i<coordinate.length;i++){
-    if(coordinate[i][2] == 0){
-      stroke(255,0,0);
-      fill(255,0,0);
-    } else {
-      stroke(0,0,255);
-      fill(0,0,255);
-    }
-    ellipse(coordinate[i][0],coordinate[i][1],5,5);
-  }
-}
-    
-function mousePressed(){
-  var class_name;
-  if(mouseButton == LEFT){
-    class_name = 0;
-  } else {
-    class_name = 1;
-  }
-  if(mouseX>=0 && mouseX<=plane_size && mouseY>=0 && mouseY<=plane_size){
-    var temp = [mouseX, mouseY, class_name];
-    coordinate.push(temp);
-  }
-}
-
-function change(){
-  range_x_min = document.getElementById("min_x").value;
-  range_x_max = document.getElementById("max_x").value;
-  range_y_min = document.getElementById("min_y").value;
-  range_y_max = document.getElementById("max_y").value;
-}
-
-function exportCSV(){
-  var csvContent = "data:text/csv;charset=utf-8,";
-  var data = [];
-  for(var i=0;i<coordinate.length;i++){
-    var x = coordinate[i][0] * (range_x_max - range_x_min) / plane_size ;
-    var y = (plane_size - coordinate[i][1]) * (range_y_max - range_y_min) / plane_size ;
-    var temp = [x, y, coordinate[i][2]];
-    data.push(temp);
-  }
-  data.forEach(function(infoArray, index){
-   dataString = infoArray.join(",");
-   csvContent += index < data.length ? dataString+ "\n" : dataString;
-  });
-  var encodedUri = encodeURI(csvContent);
-  window.open(encodedUri);
-}
     
 </script>
 

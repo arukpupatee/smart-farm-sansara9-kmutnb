@@ -1,7 +1,7 @@
 {
-  "name": "scatter-to-csv",
+  "name": "smartfarm",
   "version": "0.2.6",
-  "description": "Generate Data from Scatter Plot",
+  "description": "Smart Farm @Sansara9 KMUTNB",
   "engines": {
     "node": "6.11.1"
   },
@@ -19,8 +19,7 @@
     "tape": "^4.7.0"
   },
   "repository": {
-    "type": "git",
-    "url": "https://github.com/heroku/node-js-getting-started"
+    "type": "git"
   },
   "keywords": [
     "node",
