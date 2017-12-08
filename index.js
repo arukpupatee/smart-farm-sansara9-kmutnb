@@ -3,8 +3,8 @@ var app = express();
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
 
-app.set('port', (process.env.PORT || 5000));
-//app.set('port', 80);
+//app.set('port', (process.env.PORT || 5000));
+app.set('port', 5000);
 
 app.use(express.static(__dirname + '/public'));
 
