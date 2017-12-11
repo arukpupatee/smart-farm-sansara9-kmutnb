@@ -97,16 +97,27 @@ apiRoutes.use(function(req, res, next) {
     }
 });
 
+/*
 apiRoutes.get('/', function(req, res) {
   res.json({ message: 'Welcome to the coolest API on earth!' });
 });
+*/
 
-apiRoutes.get('/users', function(req, res) {
-  Users.get_all_users(function(users) {
-    res.json(users);
+apiRoutes.get('/insert/air_temperature/:farm_id/:sensor_id/:value', function(req, res) {
+  //var timestamp = Math.floor(new Date()/1000);
+  var farm_id = parseInt(req.params.farm_id);
+  var sensor_id = parseInt(req.params.sensor_id);
+  var value = parseFloat(req.params.value);
+  //var sql = "INSERT INTO temperature VALUES ("+timestamp+", "+temperature+", 'temperature')";
+  var sql = "INSERT INTO air_temperature VALUES (NOW(), "+farm_id+", "+sensor_id+", "+value+", 'temperature')";
+  db.query(sql, function (err, result) {
+    if (err) throw err;
   });
+  res.send('ok');
 });
 
+
+/*
 apiRoutes.get('/insert/temperature/:temperature', function(req, res) {
   //var timestamp = Math.floor(new Date()/1000);
   var temperature = parseFloat(req.params.temperature);
@@ -163,6 +174,7 @@ apiRoutes.get('/insert/:temperature/:humidity/:brightness', function(req, res) {
   });
   res.send('ok');
 });
+*/
 
 app.use('/api', apiRoutes);
 
