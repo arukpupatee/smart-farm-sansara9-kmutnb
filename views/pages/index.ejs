@@ -4,7 +4,7 @@
   <% include ../partials/header.ejs %>
 </head>
 
-<body>
+<body background="image/background.jpg">
   <style>
   #value-controls {
     margin: 12px 0px 20px 0px;
@@ -16,12 +16,12 @@
   </style>
 
   <% include ../partials/nav.ejs %>
-  <div class="jumbotron">
+  <div class="jumbotron" style="background-color: transparent;">
     <center>
     <div style="width: 90%">
       <div class="row align-items-center justify-content-center">
-        <div><b>แผงควบคุมวาล์วน้ำ</b></div>
-        <div id="value-controls" class="input-group">
+        <div style="color: white;"><b>แผงควบคุมวาล์วน้ำ</b></div>
+        <div id="value-controls" class="input-group" style="background-color: white; margin: 0px 15px 0px 15px;">
           <div class="col-sm-3">
             <center>
               <div><b>วาล์ว 1</b></div>
@@ -48,7 +48,7 @@
           </div>
         </div>
       </div>
-      <div class="row align-items-center justify-content-center" style="margin: 0px; padding: 0px;">
+      <div class="row align-items-center justify-content-center" style="margin: 30px 0px 0px 0px; padding: 0px;">
           <iframe src="http://35.198.211.170:3000/dashboard/db/smart-farm?orgId=1&refresh=10s" width="1300" height="1250" frameborder="0" style="margin: 0px; padding: 0px;"></iframe>
       </div>
     </div>
