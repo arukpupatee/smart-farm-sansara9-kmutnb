@@ -25,25 +25,25 @@
           <div class="col-sm-3">
             <center>
               <div><b>วาล์ว 1</b></div>
-              <input type="checkbox" class="valve-checkbox" data-on-text="เปิด" data-off-text="ปิด" data-on-color="success" data-off-color="danger" checked>
+              <input type="checkbox" name="valve1"  class="valve-checkbox" data-on-text="เปิด" data-off-text="ปิด" data-on-color="success" data-off-color="danger" checked>
             </center>
           </div>
           <div class="col-sm-3">
             <center>
               <div><b>วาล์ว 2</b></div>
-              <input type="checkbox" class="valve-checkbox" data-on-text="เปิด" data-off-text="ปิด" data-on-color="success" data-off-color="danger" checked>
+              <input type="checkbox" name="valve2" class="valve-checkbox" data-on-text="เปิด" data-off-text="ปิด" data-on-color="success" data-off-color="danger" checked>
             </center>
           </div>
           <div class="col-sm-3">
             <center>
               <div><b>วาล์ว 3</b></div>
-              <input type="checkbox" class="valve-checkbox" data-on-text="เปิด" data-off-text="ปิด" data-on-color="success" data-off-color="danger" checked>
+              <input type="checkbox" name="valve3" class="valve-checkbox" data-on-text="เปิด" data-off-text="ปิด" data-on-color="success" data-off-color="danger" checked>
             </center>
           </div>
           <div class="col-sm-3">
             <center>
               <div><b>วาล์ว 4</b></div>
-              <input type="checkbox" class="valve-checkbox" data-on-text="เปิด" data-off-text="ปิด" data-on-color="success" data-off-color="danger" checked>
+              <input type="checkbox" name="valve4" class="valve-checkbox" data-on-text="เปิด" data-off-text="ปิด" data-on-color="success" data-off-color="danger" checked>
             </center>
           </div>
         </div>
@@ -57,6 +57,20 @@
 
   <script>
     $(".valve-checkbox").bootstrapSwitch();
+    // console.log(a);
+    for(let i = 1; i < 5; i++){
+      $('input[name="valve'+i+'"]').on('switchChange.bootstrapSwitch', function(event, state) {
+        // console.log(state); // true | false
+        // console.log(i);
+        // $.ajax({
+        //   url: "/api/insert/valve_status/1/"+i+"/"+(state?1:0),
+        // })
+        // $.get( ,
+      });
+    }
+    // $('input[name="valve1"]').click(function(e){
+    //   console.log("a");
+    // })
   </script>
 
 </body>

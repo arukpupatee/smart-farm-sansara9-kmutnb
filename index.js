@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 var db = mysql.createConnection({
   host     : '127.0.0.1', //port 3306 for MariaDB
   user     : 'root',
-  password : 'Sansara@salawin',
+  password : '1234',
   database : 'smartfarm',
 });
 
@@ -79,35 +79,54 @@ apiRoutes.use(function(req, res, next) {
     // decode token
     if (token) {
         // verifies secret and checks exp
-        jwt.verify(token, app.get('secret'), function(err, decoded) {      
+        jwt.verify(token, app.get('secret'), function(err, decoded) {
             if (err) {
-                return res.json({ success: false, message: 'Failed to authenticate token.' });    
+                return res.json({ success: false, message: 'Failed to authenticate token.' });
             } else {
                 // if everything is good, save to request for use in other routes
-                req.decoded = decoded;    
+                req.decoded = decoded;
                 next();
             }
         });
     } else {
         // if there is no token
         // return an error
-        return res.status(403).send({ 
-            success: false, 
-            message: 'No token provided.' 
+        return res.status(403).send({
+            success: false,
+            message: 'No token provided.'
         });
     }
 });
 */
 
-apiRoutes.get('/insert/air_temperature/:farm_id/:sensor_id/:value', function(req, res) {
+// add valve
+
+
+apiRoutes.get('/get/valve_status/:farm_id/:valve_id', function(req, res) {
   var farm_id = parseInt(req.params.farm_id);
-  var sensor_id = parseInt(req.params.sensor_id);
+  var valve_id = parseInt(req.params.valve_id);
   var value = parseFloat(req.params.value);
-  var sql = "INSERT INTO air_temperature VALUES (NOW(), "+farm_id+", "+sensor_id+", "+value+", 'Air Temperature')";
+  var sql = "SELECT status FROM valve WHERE farm_id="+farm_id+" AND valve_id="+valve_id;
   db.query(sql, function (err, result) {
     if (err) throw err;
+    val = result[0].status
+    if(val == 0){
+      res.send("OFF");
+    }else{
+      res.send("ON");
+    }
   });
-  res.send('ok');
+});
+
+apiRoutes.get('/insert/valve_status/:farm_id/:valve_id/:value', function(req, res) {
+  var farm_id = parseInt(req.params.farm_id);
+  var valve_id = parseInt(req.params.valve_id);
+  var value = parseFloat(req.params.value);
+  var sql = "UPDATE valve SET status="+value+" WHERE farm_id="+farm_id+" AND valve_id="+valve_id;
+  db.query(sql, function (err, result) {
+    if (err) throw err;
+    res.send('ok');
+  });
 });
 
 apiRoutes.get('/insert/air_humidity/:farm_id/:sensor_id/:value', function(req, res) {
@@ -118,8 +137,8 @@ apiRoutes.get('/insert/air_humidity/:farm_id/:sensor_id/:value', function(req, r
   var sql = "INSERT INTO air_humidity VALUES (NOW(), "+farm_id+", "+sensor_id+", "+value+", 'Air Humidity')";
   db.query(sql, function (err, result) {
     if (err) throw err;
+    res.send('ok');
   });
-  res.send('ok');
 });
 
 apiRoutes.get('/insert/brightness/:farm_id/:sensor_id/:value', function(req, res) {
@@ -129,8 +148,8 @@ apiRoutes.get('/insert/brightness/:farm_id/:sensor_id/:value', function(req, res
   var sql = "INSERT INTO brightness VALUES (NOW(), "+farm_id+", "+sensor_id+", "+value+", 'Brightness')";
   db.query(sql, function (err, result) {
     if (err) throw err;
+    res.send('ok');
   });
-  res.send('ok');
 });
 
 apiRoutes.get('/insert/soil_temperature/:farm_id/:sensor_id/:value', function(req, res) {
@@ -140,8 +159,8 @@ apiRoutes.get('/insert/soil_temperature/:farm_id/:sensor_id/:value', function(re
   var sql = "INSERT INTO soil_temperature VALUES (NOW(), "+farm_id+", "+sensor_id+", "+value+", 'Soil Temperature')";
   db.query(sql, function (err, result) {
     if (err) throw err;
+    res.send('ok');
   });
-  res.send('ok');
 });
 
 apiRoutes.get('/insert/soil_moisture/:farm_id/:sensor_id/:value', function(req, res) {
@@ -151,8 +170,8 @@ apiRoutes.get('/insert/soil_moisture/:farm_id/:sensor_id/:value', function(req, 
   var sql = "INSERT INTO soil_moisture VALUES (NOW(), "+farm_id+", "+sensor_id+", "+value+", 'Soil Moisture')";
   db.query(sql, function (err, result) {
     if (err) throw err;
+    res.send('ok');
   });
-  res.send('ok');
 });
 
 
