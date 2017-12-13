@@ -56,21 +56,36 @@
   </div>
 
   <script>
-    $(".valve-checkbox").bootstrapSwitch();
-    // console.log(a);
+
+    for(let i = 1; i < 5; i++){
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          console.log("asd");
+         if(this.responseText == "ON"){
+           $('input[name="valve'+i+'"]').bootstrapSwitch('state', true);
+         }else{
+           $('input[name="valve'+i+'"]').bootstrapSwitch('state', false);
+         }
+        }
+      };
+      xhttp.open("GET", "api/get/valve_status/1/"+i, true);
+      xhttp.send();
+    }
     for(let i = 1; i < 5; i++){
       $('input[name="valve'+i+'"]').on('switchChange.bootstrapSwitch', function(event, state) {
-        // console.log(state); // true | false
-        // console.log(i);
-        // $.ajax({
-        //   url: "/api/insert/valve_status/1/"+i+"/"+(state?1:0),
-        // })
-        // $.get( ,
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+           if(this.responseText == "ok"){
+             console.log("valve", i, (state?"ON":"OFF"));
+           }
+          }
+        };
+        xhttp.open("GET", "api/insert/valve_status/1/"+i+"/"+(state?1:0), true);
+        xhttp.send();
       });
     }
-    // $('input[name="valve1"]').click(function(e){
-    //   console.log("a");
-    // })
   </script>
 
 </body>
