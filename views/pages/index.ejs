@@ -14,6 +14,9 @@
   }
 
   </style>
+  <script>
+    window.loadCompleted = false;
+  </script>
 
   <% include ../partials/nav.ejs %>
   <div class="jumbotron" style="background-color: transparent;">
@@ -48,7 +51,7 @@
           </div>
         </div>
       </div>
-      <div class="row align-items-center justify-content-center" style="margin: 30px 0px 0px 0px; padding: 0px;">
+      <div class="row align-items-center justify-content-center" style="margin: 30px 0px 0px; padding: 0px;">
           <iframe src="http://35.198.211.170:3000/dashboard/db/smart-farm?orgId=1&refresh=10s" width="1300" height="1250" frameborder="0" style="margin: 0px; padding: 0px;"></iframe>
       </div>
     </div>
@@ -56,36 +59,39 @@
   </div>
 
   <script>
-
-    for(let i = 1; i < 5; i++){
-      var xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-          console.log("asd");
-         if(this.responseText == "ON"){
-           $('input[name="valve'+i+'"]').bootstrapSwitch('state', true);
-         }else{
-           $('input[name="valve'+i+'"]').bootstrapSwitch('state', false);
-         }
-        }
-      };
-      xhttp.open("GET", "api/get/valve_status/1/"+i, true);
-      xhttp.send();
-    }
-    for(let i = 1; i < 5; i++){
-      $('input[name="valve'+i+'"]').on('switchChange.bootstrapSwitch', function(event, state) {
+    $(document).ready(function(){
+      for(let i = 1; i < 5; i++){
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
           if (this.readyState == 4 && this.status == 200) {
-           if(this.responseText == "ok"){
-             console.log("valve", i, (state?"ON":"OFF"));
+            console.log("asd");
+           if(this.responseText == "ON"){
+             $('input[name="valve'+i+'"]').bootstrapSwitch('state', true);
+           }else{
+             $('input[name="valve'+i+'"]').bootstrapSwitch('state', false);
+           }
+           if(i == 4){
+             for(let i = 1; i < 5; i++){
+               $('input[name="valve'+i+'"]').on('switchChange.bootstrapSwitch', function(event, state) {
+                 var xhttp = new XMLHttpRequest();
+                 xhttp.onreadystatechange = function() {
+                   if (this.readyState == 4 && this.status == 200) {
+                    if(this.responseText == "ok"){
+                      console.log("valve", i, (state?"ON":"OFF"));
+                    }
+                   }
+                 };
+                 xhttp.open("GET", "api/insert/valve_status/1/"+i+"/"+(state?1:0), true);
+                 xhttp.send();
+               });
+             }
            }
           }
         };
-        xhttp.open("GET", "api/insert/valve_status/1/"+i+"/"+(state?1:0), true);
+        xhttp.open("GET", "api/get/valve_status/1/"+i, true);
         xhttp.send();
-      });
-    }
+      }
+    });
   </script>
 
 </body>

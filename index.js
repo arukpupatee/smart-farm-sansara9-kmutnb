@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 var db = mysql.createConnection({
   host     : '127.0.0.1', //port 3306 for MariaDB
   user     : 'root',
-  password : 'Sansara@salawin',
+  password : '1234',
   database : 'smartfarm',
 });
 
@@ -105,7 +105,6 @@ apiRoutes.use(function(req, res, next) {
 apiRoutes.get('/get/valve_status/:farm_id/:valve_id', function(req, res) {
   var farm_id = parseInt(req.params.farm_id);
   var valve_id = parseInt(req.params.valve_id);
-  var value = parseFloat(req.params.value);
   var sql = "SELECT status FROM valve WHERE farm_id="+farm_id+" AND valve_id="+valve_id;
   db.query(sql, function (err, result) {
     if (err) throw err;
