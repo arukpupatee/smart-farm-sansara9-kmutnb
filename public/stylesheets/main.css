@@ -4,4 +4,6 @@ body {
 .jumbotron {
     background-color: #FFFFFF;
 }
-
+#value-controls {
+  margin: 12px 0px 0px 20px;
+}

@@ -5,30 +5,59 @@
 </head>
 
 <body>
+  <style>
+  #value-controls {
+    margin: 12px 0px 20px 0px;
+    border: 1px solid #ddd;
+    padding: 12px 0px 30px 0px;
+    border-radius: 20px;
+  }
+
+  </style>
 
   <% include ../partials/nav.ejs %>
   <div class="jumbotron">
-    <div class="container">
+    <center>
+    <div style="width: 90%">
       <div class="row align-items-center justify-content-center">
-        <div class="col-2"></div>
-        <div class="col-6">
-          <h1>สถานะการจ่ายน้ำ : <span style="color:#229e0c;">กำลังเปิดอยู่</span></h1>
+        <div><b>แผงควบคุมวาล์วน้ำ</b></div>
+        <div id="value-controls" class="input-group">
+          <div class="col-sm-3">
+            <center>
+              <div><b>วาล์ว 1</b></div>
+              <input type="checkbox" class="valve-checkbox" data-on-text="เปิด" data-off-text="ปิด" data-on-color="success" data-off-color="danger" checked>
+            </center>
+          </div>
+          <div class="col-sm-3">
+            <center>
+              <div><b>วาล์ว 2</b></div>
+              <input type="checkbox" class="valve-checkbox" data-on-text="เปิด" data-off-text="ปิด" data-on-color="success" data-off-color="danger" checked>
+            </center>
+          </div>
+          <div class="col-sm-3">
+            <center>
+              <div><b>วาล์ว 3</b></div>
+              <input type="checkbox" class="valve-checkbox" data-on-text="เปิด" data-off-text="ปิด" data-on-color="success" data-off-color="danger" checked>
+            </center>
+          </div>
+          <div class="col-sm-3">
+            <center>
+              <div><b>วาล์ว 4</b></div>
+              <input type="checkbox" class="valve-checkbox" data-on-text="เปิด" data-off-text="ปิด" data-on-color="success" data-off-color="danger" checked>
+            </center>
+          </div>
         </div>
-        <div class="col-4">
-          <button type="button" class="btn btn-success btn-lg">เปิด</button>
-          <button type="button" class="btn btn-danger btn-lg">ปิด</button>
-        </div>
-        <div class="col-2"></div>
       </div>
-      <div class="row align-items-center justify-content-center">
-          <iframe src="http://35.198.211.170:3000/dashboard/db/smart-farm?orgId=1&refresh=10s" width="1300" height="650" frameborder="0"></iframe>
+      <div class="row align-items-center justify-content-center" style="margin: 0px; padding: 0px;">
+          <iframe src="http://35.198.211.170:3000/dashboard/db/smart-farm?orgId=1&refresh=10s" width="1300" height="1250" frameborder="0" style="margin: 0px; padding: 0px;"></iframe>
       </div>
     </div>
+  </center>
   </div>
-  
-<script>
-    
-</script>
+
+  <script>
+    $(".valve-checkbox").bootstrapSwitch();
+  </script>
 
 </body>
 </html>
