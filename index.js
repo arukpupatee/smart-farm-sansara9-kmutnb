@@ -45,6 +45,7 @@ app.get('/reg', function(req,res) {
 
 var apiRoutes = express.Router();
 
+/*
 apiRoutes.post('/authenticate', function(req, res) {
     var username = req.body.username;
     var password = req.body.password;
@@ -96,89 +97,66 @@ apiRoutes.use(function(req, res, next) {
         });
     }
 });
-
-/*
-apiRoutes.get('/', function(req, res) {
-  res.json({ message: 'Welcome to the coolest API on earth!' });
-});
 */
 
 apiRoutes.get('/insert/air_temperature/:farm_id/:sensor_id/:value', function(req, res) {
-  //var timestamp = Math.floor(new Date()/1000);
+  var farm_id = parseInt(req.params.farm_id);
+  var sensor_id = parseInt(req.params.sensor_id);
+  var value = parseFloat(req.params.value);
+  var sql = "INSERT INTO air_temperature VALUES (NOW(), "+farm_id+", "+sensor_id+", "+value+", 'Air Temperature')";
+  db.query(sql, function (err, result) {
+    if (err) throw err;
+  });
+  res.send('ok');
+});
+
+apiRoutes.get('/insert/air_humidity/:farm_id/:sensor_id/:value', function(req, res) {
   var farm_id = parseInt(req.params.farm_id);
   var sensor_id = parseInt(req.params.sensor_id);
   var value = parseFloat(req.params.value);
   //var sql = "INSERT INTO temperature VALUES ("+timestamp+", "+temperature+", 'temperature')";
-  var sql = "INSERT INTO air_temperature VALUES (NOW(), "+farm_id+", "+sensor_id+", "+value+", 'temperature')";
+  var sql = "INSERT INTO air_humidity VALUES (NOW(), "+farm_id+", "+sensor_id+", "+value+", 'Air Humidity')";
   db.query(sql, function (err, result) {
     if (err) throw err;
   });
   res.send('ok');
 });
 
-
-/*
-apiRoutes.get('/insert/temperature/:temperature', function(req, res) {
-  //var timestamp = Math.floor(new Date()/1000);
-  var temperature = parseFloat(req.params.temperature);
-  //var sql = "INSERT INTO temperature VALUES ("+timestamp+", "+temperature+", 'temperature')";
-  var sql = "INSERT INTO temperature VALUES (NOW(), "+temperature+", 'temperature')";
+apiRoutes.get('/insert/brightness/:farm_id/:sensor_id/:value', function(req, res) {
+  var farm_id = parseInt(req.params.farm_id);
+  var sensor_id = parseInt(req.params.sensor_id);
+  var value = parseFloat(req.params.value);
+  var sql = "INSERT INTO brightness VALUES (NOW(), "+farm_id+", "+sensor_id+", "+value+", 'Brightness')";
   db.query(sql, function (err, result) {
     if (err) throw err;
   });
   res.send('ok');
 });
 
-apiRoutes.get('/insert/humidity/:humidity', function(req, res) {
-  //var timestamp = Math.floor(new Date()/1000);
-  var humidity = parseFloat(req.params.humidity);
-  //var sql = "INSERT INTO humidity VALUES ("+timestamp+", "+humidity+", 'humidity')";
-  var sql = "INSERT INTO humidity VALUES (NOW(), "+humidity+", 'humidity')";
+apiRoutes.get('/insert/soil_temperature/:farm_id/:sensor_id/:value', function(req, res) {
+  var farm_id = parseInt(req.params.farm_id);
+  var sensor_id = parseInt(req.params.sensor_id);
+  var value = parseFloat(req.params.value);
+  var sql = "INSERT INTO soil_temperature VALUES (NOW(), "+farm_id+", "+sensor_id+", "+value+", 'Soil Temperature')";
   db.query(sql, function (err, result) {
     if (err) throw err;
   });
   res.send('ok');
 });
 
-apiRoutes.get('/insert/brightness/:brightness', function(req, res) {
-  //var timestamp = Math.floor(new Date()/1000);
-  var brightness = parseFloat(req.params.brightness);
-  //var sql = "INSERT INTO brightness VALUES ("+timestamp+", "+brightness+", 'brightness')";
-  var sql = "INSERT INTO brightness VALUES (NOW(), "+brightness+", 'brightness')";
+apiRoutes.get('/insert/soil_moisture/:farm_id/:sensor_id/:value', function(req, res) {
+  var farm_id = parseInt(req.params.farm_id);
+  var sensor_id = parseInt(req.params.sensor_id);
+  var value = parseFloat(req.params.value);
+  var sql = "INSERT INTO soil_moisture VALUES (NOW(), "+farm_id+", "+sensor_id+", "+value+", 'Soil Moisture')";
   db.query(sql, function (err, result) {
     if (err) throw err;
   });
   res.send('ok');
 });
 
-
-apiRoutes.get('/insert/:temperature/:humidity/:brightness', function(req, res) {
-  //var timestamp = Math.floor(new Date()/1000);
-  var temperature = parseFloat(req.params.temperature);
-  var humidity = parseFloat(req.params.humidity);
-  var brightness = parseFloat(req.params.brightness);
-  //var sql = "INSERT INTO temperature VALUES ("+timestamp+", "+temperature+", 'temperature')";
-  var sql = "INSERT INTO temperature VALUES (NOW(), "+temperature+", 'temperature')";
-  db.query(sql, function (err, result) {
-    if (err) throw err;
-  });
-  //var sql = "INSERT INTO humidity VALUES ("+timestamp+", "+humidity+", 'humidity')";
-  var sql = "INSERT INTO humidity VALUES (NOW(), "+humidity+", 'humidity')";
-  db.query(sql, function (err, result) {
-    if (err) throw err;
-  });
-  //var sql = "INSERT INTO brightness VALUES ("+timestamp+", "+brightness+", 'brightness')";
-  var sql = "INSERT INTO brightness VALUES (NOW(), "+brightness+", 'brightness')";
-  db.query(sql, function (err, result) {
-    if (err) throw err;
-  });
-  res.send('ok');
-});
-*/
 
 app.use('/api', apiRoutes);
-
-
 
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
