@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 var db = mysql.createConnection({
   host     : '127.0.0.1', //port 3306 for MariaDB
   user     : 'root',
-  password : 'Sansara@salawin',
+  password : '1234',//'Sansara@salawin',
   database : 'smartfarm',
 });
 
@@ -128,6 +128,42 @@ apiRoutes.get('/insert/valve_status/:farm_id/:valve_id/:value', function(req, re
   });
 });
 
+apiRoutes.get('/get/air_temperature/:farm_id/:sensor_id', function(req, res) {
+  var farm_id = parseInt(req.params.farm_id);
+  var sensor_id = parseInt(req.params.sensor_id);
+  //var sql = "INSERT INTO temperature VALUES ("+timestamp+", "+temperature+", 'temperature')";
+  var sql = "SELECT value FROM air_temperature WHERE farm_id="+farm_id+" AND sensor_id="+sensor_id;
+  db.query(sql, function (err, result) {
+    if (err) throw err;
+    val = result[result.length-1].value
+    res.send(val+"");
+  });
+});
+
+apiRoutes.get('/insert/air_temperature/:farm_id/:sensor_id/:value', function(req, res) {
+  var farm_id = parseInt(req.params.farm_id);
+  var sensor_id = parseInt(req.params.sensor_id);
+  var value = parseFloat(req.params.value);
+  //var sql = "INSERT INTO temperature VALUES ("+timestamp+", "+temperature+", 'temperature')";
+  var sql = "INSERT INTO air_temperature VALUES (NOW(), "+farm_id+", "+sensor_id+", "+value+", 'Air Temperature')";
+  db.query(sql, function (err, result) {
+    if (err) throw err;
+    res.send('ok');
+  });
+});
+
+apiRoutes.get('/get/air_humidity/:farm_id/:sensor_id', function(req, res) {
+  var farm_id = parseInt(req.params.farm_id);
+  var sensor_id = parseInt(req.params.sensor_id);
+  //var sql = "INSERT INTO temperature VALUES ("+timestamp+", "+temperature+", 'temperature')";
+  var sql = "SELECT value FROM air_humidity WHERE farm_id="+farm_id+" AND sensor_id="+sensor_id;
+  db.query(sql, function (err, result) {
+    if (err) throw err;
+    val = result[result.length-1].value
+    res.send(val+"");
+  });
+});
+
 apiRoutes.get('/insert/air_humidity/:farm_id/:sensor_id/:value', function(req, res) {
   var farm_id = parseInt(req.params.farm_id);
   var sensor_id = parseInt(req.params.sensor_id);
@@ -137,6 +173,18 @@ apiRoutes.get('/insert/air_humidity/:farm_id/:sensor_id/:value', function(req, r
   db.query(sql, function (err, result) {
     if (err) throw err;
     res.send('ok');
+  });
+});
+
+apiRoutes.get('/get/brightness/:farm_id/:sensor_id', function(req, res) {
+  var farm_id = parseInt(req.params.farm_id);
+  var sensor_id = parseInt(req.params.sensor_id);
+  //var sql = "INSERT INTO temperature VALUES ("+timestamp+", "+temperature+", 'temperature')";
+  var sql = "SELECT value FROM brightness WHERE farm_id="+farm_id+" AND sensor_id="+sensor_id;
+  db.query(sql, function (err, result) {
+    if (err) throw err;
+    val = result[result.length-1].value
+    res.send(val+"");
   });
 });
 
@@ -151,6 +199,18 @@ apiRoutes.get('/insert/brightness/:farm_id/:sensor_id/:value', function(req, res
   });
 });
 
+apiRoutes.get('/get/soil_temperature/:farm_id/:sensor_id', function(req, res) {
+  var farm_id = parseInt(req.params.farm_id);
+  var sensor_id = parseInt(req.params.sensor_id);
+  //var sql = "INSERT INTO temperature VALUES ("+timestamp+", "+temperature+", 'temperature')";
+  var sql = "SELECT status FROM soil_temperature WHERE farm_id="+farm_id+" AND sensor_id="+sensor_id;
+  db.query(sql, function (err, result) {
+    if (err) throw err;
+    val = result[result.length-1].value
+    res.send(val+"");
+  });
+});
+
 apiRoutes.get('/insert/soil_temperature/:farm_id/:sensor_id/:value', function(req, res) {
   var farm_id = parseInt(req.params.farm_id);
   var sensor_id = parseInt(req.params.sensor_id);
@@ -159,6 +219,18 @@ apiRoutes.get('/insert/soil_temperature/:farm_id/:sensor_id/:value', function(re
   db.query(sql, function (err, result) {
     if (err) throw err;
     res.send('ok');
+  });
+});
+
+apiRoutes.get('/get/soil_moisture/:farm_id/:sensor_id', function(req, res) {
+  var farm_id = parseInt(req.params.farm_id);
+  var sensor_id = parseInt(req.params.sensor_id);
+  //var sql = "INSERT INTO temperature VALUES ("+timestamp+", "+temperature+", 'temperature')";
+  var sql = "SELECT status FROM soil_moisture WHERE farm_id="+farm_id+" AND sensor_id="+sensor_id;
+  db.query(sql, function (err, result) {
+    if (err) throw err;
+    val = result[result.length-1].value
+    res.send(val+"");
   });
 });
 

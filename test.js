@@ -5,24 +5,18 @@ const test = require('tape');
 // Start the app
 const env = Object.assign({}, process.env, {PORT: 5000});
 const child = spawn('node', ['index.js'], {env});
+const assert = require("assert")
 
-test('responds to requests', (t) => {
-  t.plan(4);
-
-  // Wait until the server is ready
-  child.stdout.on('data', _ => {
-    // Make a request to our app
-    request('http://127.0.0.1:5000', (error, response, body) => {
-      // stop the server
-      child.kill();
-
-      // No error
-      t.false(error);
-      // Successful response
-      t.equal(response.statusCode, 200);
-      // Assert content checks
-      t.notEqual(body.indexOf("<title>Node.js Getting Started on Heroku</title>"), -1);
-      t.notEqual(body.indexOf("Getting Started with Node on Heroku"), -1);
-    });
-  });
-});
+// test valve status set-get
+for(let i = 1; i < 5; i++){
+  request('http://127.0.0.1:5000/api/insert/valve_status/1/'+i+'/0', (error, response, body1) => {
+    request('http://127.0.0.1:5000/api/get/valve_status/1/'+i, (error, response, body2) => {
+      assert((body1 == 'ok') && (body2 == 'OFF'), 'Set "OFF" on valve '+i+' but not "OFF"')
+      request('http://127.0.0.1:5000/api/insert/valve_status/1/'+i+'/1', (error, response, body1) => {
+        request('http://127.0.0.1:5000/api/get/valve_status/1/'+i, (error, response, body2) => {
+          assert((body1 == 'ok') && (body2 == 'ON'), 'Set "ON" on valve '+i+' but not "ON"')
+        })
+      })
+    })
+  })
+}
