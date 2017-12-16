@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 var db = mysql.createConnection({
   host     : '127.0.0.1', //port 3306 for MariaDB
   user     : 'root',
-  password : '1234',//'Sansara@salawin',
+  password : 'Sansara@salawin',
   database : 'smartfarm',
 });
 
@@ -203,7 +203,7 @@ apiRoutes.get('/get/soil_temperature/:farm_id/:sensor_id', function(req, res) {
   var farm_id = parseInt(req.params.farm_id);
   var sensor_id = parseInt(req.params.sensor_id);
   //var sql = "INSERT INTO temperature VALUES ("+timestamp+", "+temperature+", 'temperature')";
-  var sql = "SELECT status FROM soil_temperature WHERE farm_id="+farm_id+" AND sensor_id="+sensor_id;
+  var sql = "SELECT value FROM soil_temperature WHERE farm_id="+farm_id+" AND sensor_id="+sensor_id;
   db.query(sql, function (err, result) {
     if (err) throw err;
     val = result[result.length-1].value
@@ -226,7 +226,7 @@ apiRoutes.get('/get/soil_moisture/:farm_id/:sensor_id', function(req, res) {
   var farm_id = parseInt(req.params.farm_id);
   var sensor_id = parseInt(req.params.sensor_id);
   //var sql = "INSERT INTO temperature VALUES ("+timestamp+", "+temperature+", 'temperature')";
-  var sql = "SELECT status FROM soil_moisture WHERE farm_id="+farm_id+" AND sensor_id="+sensor_id;
+  var sql = "SELECT value FROM soil_moisture WHERE farm_id="+farm_id+" AND sensor_id="+sensor_id;
   db.query(sql, function (err, result) {
     if (err) throw err;
     val = result[result.length-1].value
