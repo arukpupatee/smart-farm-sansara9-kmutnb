@@ -239,6 +239,7 @@ apiRoutes.get('/insert/soil_moisture/:farm_id/:sensor_id/:value', function(req, 
   var sensor_id = parseInt(req.params.sensor_id);
   var value = parseFloat(req.params.value);
   var sql = "INSERT INTO soil_moisture VALUES (NOW(), "+farm_id+", "+sensor_id+", "+value+", 'Soil Moisture')";
+  console.log(sql);
   db.query(sql, function (err, result) {
     if (err) throw err;
     res.send('ok');
