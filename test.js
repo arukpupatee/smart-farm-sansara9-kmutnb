@@ -25,8 +25,8 @@ for(let i = 1; i < 5; i++){
 
 var name_val = ['air_temperature', 'air_humidity', 'brightness', 'soil_temperature', 'soil_moisture']
 
-for(var n in name_val){
-  let num = Math.random().tostring()
+for(let n in name_val){
+  let num = Math.random()
   console.log(num);
   request('http://127.0.0.1:5000/api/insert/'+name_val[n]+'/1/1/'+num, (error, response, body1) => {
     request('http://127.0.0.1:5000/api/get/'+name_val[n]+'/1/1', (error, response, body2) => {
