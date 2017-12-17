@@ -27,9 +27,9 @@ var name_val = ['air_temperature', 'air_humidity', 'brightness', 'soil_temperatu
 
 for(var n in name_val){
   let num = parseInt(Math.random()*1000)
-  request('http://127.0.0.1:5000/api/insert/'+n+'/1/1/'+num, (error, response, body1) => {
-    request('http://127.0.0.1:5000/api/get/'+n+'/1/1', (error, response, body2) => {
-      assert((body1 == 'ok') && (body2 == num), 'Set "OFF" value on '+n+' as '+num+' but value is not '+num)
+  request('http://127.0.0.1:5000/api/insert/'+name_val[n]+'/1/1/'+num, (error, response, body1) => {
+    request('http://127.0.0.1:5000/api/get/'+name_val[n]+'/1/1', (error, response, body2) => {
+      assert((body1 == 'ok') && (body2 == num), 'Set value on '+name_val[n]+' as '+num+' but value is not '+num)
     })
   })
 }
