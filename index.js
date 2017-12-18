@@ -1,7 +1,11 @@
 var express = require('express');
+var session = require('express-session')
 var app = express();
+var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
+var passport = require('passport')
+var flash = require('connect-flash')
 
 var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var config = require('./config'); // get our config file
@@ -14,36 +18,100 @@ app.set('secret', config.secret);
 app.set('port', 5000);
 
 app.use(express.static(__dirname + '/public'));
+app.use(flash());
 
 // views is directory for all template files
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
 // for parsing data
+app.use(passport.initialize());
+app.use(passport.session());
+require('./config/passport')(passport, Users);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(session({
+  secret: 'smartfarm',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}))
+// var sess;
+
+// app.use(function (req, res, next) {
+//   console.log(req.session.cookie.user);
+//   // if (!req.session.cookie.user) {
+//   //   req.session.cookie.user = ""
+//   // }
+//
+//   // get the url pathname
+//   // var pathname = parseurl(req).pathname
+//
+//   // count the views
+//   // req.session.views[pathname] = (req.session.views[pathname] || 0) + 1
+//
+//   next()
+// })
+
+var sess;
 
 var db = mysql.createConnection({
   host     : '127.0.0.1', //port 3306 for MariaDB
   user     : 'root',
-  password : 'Sansara@salawin',
+  password : '1234',//'Sansara@salawin',
   database : 'smartfarm',
 });
 
 app.get('/', function(req, res) {
-  res.render('pages/index');
-});
+  // sess = req.session
+  // console.log(req.isAuthenticated())
+  // console.log(req.session.user);
+  // console.log(req.session.user);
+  if(req.session.user == undefined){
+    res.render('pages/login')
+  }else{
+    res.render('pages/index')
+  }
+})
 
-app.get('/reg', function(req,res) {
+app.get('/reg', function(req, res) {
   Users.create_user('smartfarm.sansara9.kmutnb','Sansara@salawin','admin',function(u){
-    res.send(u);
-  });
+    res.send(u)
+  })
+})
+// router.post('/user/login', passport.authenticate('local-login', {
+//   successRedirect: baseUrl + '/',
+//   failureRedirect: baseUrl + '/user/login',
+//   failureFlash: true
+// }))
+// app.post('/login', passport.authenticate('local-login', {
+//   successRedirect: '/',
+//   failureRedirect: '/',
+//   failureFlash: true
+// }))
+app.post('/login', function(req, res) {
+  sess = req.session
+  var user = req.body.user
+  var pass = req.body.pass
+  console.log(user, pass);
+  Users.authentication(user, pass, function(u){
+    console.log(u);
+    if(u.error == undefined){
+      console.log(sess.user)
+      sess.user = u
+      res.send("success")
+      // console.log(req.session.user);
+    }else{
+      res.send("failure")
+    }
+  })
 });
 
 // API ROUTES -------------------
 
 var apiRoutes = express.Router();
+// Users.create_user("sansara", "1234", "admin", function(s){console.log(s);})
 
 /*
 apiRoutes.post('/authenticate', function(req, res) {
@@ -100,7 +168,6 @@ apiRoutes.use(function(req, res, next) {
 */
 
 // add valve
-
 
 apiRoutes.get('/get/valve_status/:farm_id/:valve_id', function(req, res) {
   var farm_id = parseInt(req.params.farm_id);
@@ -239,7 +306,6 @@ apiRoutes.get('/insert/soil_moisture/:farm_id/:sensor_id/:value', function(req, 
   var sensor_id = parseInt(req.params.sensor_id);
   var value = parseFloat(req.params.value);
   var sql = "INSERT INTO soil_moisture VALUES (NOW(), "+farm_id+", "+sensor_id+", "+value+", 'Soil Moisture')";
-  console.log(value, sql);
   db.query(sql, function (err, result) {
     if (err) throw err;
     res.send('ok');

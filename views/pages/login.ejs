@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include ../partials/header.ejs %>
+</head>
+<body background="image/login_bg.jpg">
+  <div class="login-div">
+    <center>
+      <h4 style="margin: 20px 0px 20px 0px;">เข้าสู่ระบบสมาชิก</h4>
+      <div class="form-group">
+        <label for="usr">ชื่อผู้ใช้</label>
+        <input type="text" class="form-control login-text" id="usr" >
+      </div>
+      <div class="form-group" >
+        <label for="pwd">รหัสผ่าน</label>
+        <input type="password" class="form-control login-text" id="pwd">
+      </div>
+      <button id="login-btn" class="btn" style="margin: 20px 0px 20px 0px;">เข้าสู่ระบบ</button>
+    </center>
+  </div>
+</body>
+<script>
+  $("#login-btn").click(function() {
+    var user = $("#usr").val()
+    var pass = $("#pwd").val()
+    if(user != "" && pass != "") {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          console.log(this.responseText);
+         if(this.responseText == "success"){
+           window.location.reload()
+         }else{
+           alert("ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง")
+         }
+        }
+      };
+      xhttp.open("POST", "login", true);
+      xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhttp.send("user="+user+"&pass="+pass);
+    }else{
+      alert("โปรดใส่ชื่อผู้ใช้และรหัสผ่าน")
+    }
+  })
+</script>
+</html>

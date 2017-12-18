@@ -7,7 +7,7 @@ class Users {
     this.db = mysql.createConnection({
       host     : 'localhost',
       user     : 'root',
-      password : 'Sansara@salawin',
+      password : '1234',
       database : 'smartfarm'
     });
   }
@@ -29,7 +29,8 @@ class Users {
         if (rows.length == 0) {
             var new_id = uuidv4();
             var pass = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-            Users.db.query("INSERT INTO users VALUES('" + new_id + "','" + username + "','" + pass + "','" + role + "')", function (err, rows, fields) {
+            Users.db.query("INSERT INTO users(username, password, role) VALUES('" + username + "','" + pass + "','" + role + "')", function (err, rows, fields) {
+              console.log(err);
                 callback("Success");
             });
         } else {
@@ -49,11 +50,11 @@ class Users {
                         callback(user);
                     });
                 } else {
-                    callback("Wrong password");
+                    callback({error: "Wrong password"});
                 }
             });
         } else {
-            callback("User not found");
+            callback({error: "User not found"});
         }
     });
   }

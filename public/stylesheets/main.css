@@ -1,9 +1,37 @@
-body {
-    color: #000000;
-}
+/*body {
+    color: #FFFFFF;
+}*/
 .jumbotron {
     background-color: #FFFFFF;
 }
 #value-controls {
   margin: 12px 0px 0px 20px;
 }
+
+.login-div {
+  height: 320px;
+  width: 400px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 20px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -160px;
+  margin-left: -200px;
+}
+
+.login-text {
+  width: 70%;
+  /*margin: 0px 20px 0px 20px;*/
+}
+
+/**/
+body {
+  background: url("https://i.imgur.com/LtVts6Gr.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
+
+}
+/**/
