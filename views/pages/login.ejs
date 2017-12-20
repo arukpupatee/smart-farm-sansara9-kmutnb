@@ -3,9 +3,10 @@
 <head>
   <% include ../partials/header.ejs %>
 </head>
-<body background="image/login_bg.jpg">
-  <div class="login-div">
-    <center>
+<body background="image/bg.jpg">
+  <center>
+    <img id="logo" src="image/Sansara.png">
+    <div class="login-div">
       <h4 style="margin: 20px 0px 20px 0px;">เข้าสู่ระบบสมาชิก</h4>
       <div class="form-group">
         <label for="usr">ชื่อผู้ใช้</label>
@@ -16,8 +17,8 @@
         <input type="password" class="form-control login-text" id="pwd">
       </div>
       <button id="login-btn" class="btn" style="margin: 20px 0px 20px 0px;">เข้าสู่ระบบ</button>
-    </center>
-  </div>
+    </div>
+  </center>
 </body>
 <script>
   $("#login-btn").click(function() {
@@ -40,6 +41,17 @@
       xhttp.send("user="+user+"&pass="+pass);
     }else{
       alert("โปรดใส่ชื่อผู้ใช้และรหัสผ่าน")
+    }
+  })
+
+  $(document).ready(function(){
+    var w = screen.width;
+    var h = screen.height;
+    if(h < w){
+      $("#logo").css('width', '25vw')
+    }else{
+      $("#logo").css('width', '30vh')
+      $("#logo").css('margin-top', '15vh')
     }
   })
 </script>

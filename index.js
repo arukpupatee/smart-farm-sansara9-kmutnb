@@ -37,6 +37,8 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: false }
 }))
+
+// curl -H "Authorization: Bearer eyJrIjoiZUlMNmk3YXB5MHRIeWU2Q0dlNGlydXlCTlM0Y2FYMWEiLCJuIjoidGVzdGluZyIsImlkIjoxfQ==" http://www.sansara9smartfarm.com:3000/api/dashboards/home
 // var sess;
 
 // app.use(function (req, res, next) {
@@ -59,7 +61,7 @@ var sess;
 var db = mysql.createConnection({
   host     : '127.0.0.1', //port 3306 for MariaDB
   user     : 'root',
-  password : 'Sansara@salawin',
+  password : '1234',//Sansara@salawin',
   database : 'smartfarm',
 });
 
@@ -76,7 +78,7 @@ app.get('/', function(req, res) {
 })
 
 app.get('/reg', function(req, res) {
-  Users.create_user('smartfarm.sansara9.kmutnb','Sansara@salawin','admin',function(u){
+  Users.create_user('admin','sansara','admin',function(u){
     res.send(u)
   })
 })
