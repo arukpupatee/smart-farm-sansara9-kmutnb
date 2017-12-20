@@ -68,7 +68,7 @@ var sess;
 var db = mysql.createConnection({
   host     : '127.0.0.1', //port 3306 for MariaDB
   user     : 'root',
-  password : '1234',//Sansara@salawin',
+  password : 'Sansara@salawin',
   database : 'smartfarm',
 });
 
