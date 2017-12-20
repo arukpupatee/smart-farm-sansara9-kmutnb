@@ -6,17 +6,24 @@ var bodyParser = require('body-parser');
 var mysql = require('mysql');
 var passport = require('passport')
 var flash = require('connect-flash')
+var cors = require('cors')
 
 var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var config = require('./config'); // get our config file
 var User   = require('./app/models/user'); // get our model
 var Users  = new User();
+var corsOpt = { "origin": "*",
+                "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+                "preflightContinue": true,
+                "optionsSuccessStatus": 204
+              }
 
 app.set('secret', config.secret);
 
 //app.set('port', (process.env.PORT || 5000));
 app.set('port', 5000);
 
+app.use(cors(corsOpt))
 app.use(express.static(__dirname + '/public'));
 app.use(flash());
 
