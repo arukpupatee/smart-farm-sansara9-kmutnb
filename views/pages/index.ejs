@@ -63,12 +63,13 @@
            }else{
              $('input[name="valve'+i+'"]').bootstrapSwitch('state', false);
            }
-           if(i == 4){
-             for(let i = 1; i < 5; i++){
+           if(i == 2){
+             for(let i = 1; i < 3; i++){
                $('input[name="valve'+i+'"]').on('switchChange.bootstrapSwitch', function(event, state) {
                  var xhttp2 = new XMLHttpRequest();
                  xhttp2.onreadystatechange = function() {
-                   if (this.readyState == 4 && this.status == 200) {
+                   console.log(this.responseText)
+                   if (this.readyState == 4 && this.status == 204) {
                     if(this.responseText == "ok"){
                       console.log("valve", i, (state?"ON":"OFF"));
                     }
