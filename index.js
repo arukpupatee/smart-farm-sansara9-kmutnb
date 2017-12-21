@@ -146,7 +146,7 @@ app.post('/login', function(req, res) {
   })
 });
 
-app.post('/logout', function(req, res) {
+app.get('/logout', function(req, res) {
   sess = req.session
   sess.user = undefined
   res.redirect('/')
