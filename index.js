@@ -20,7 +20,7 @@ var corsOpt = { "origin": "*",
               }
 
 influx = new Influx.InfluxDB(perf = {
- host: 'localhost',
+ // host: 'localhost',
  database: 'smartfarm',
  schema: [
    {
@@ -50,7 +50,7 @@ influx = new Influx.InfluxDB(perf = {
 app.set('secret', config.secret);
 
 //app.set('port', (process.env.PORT || 5000));
-app.set('port', 80);
+app.set('port', 5000);
 
 app.use(cors(corsOpt))
 app.use(express.static(__dirname + '/public'));
@@ -264,15 +264,37 @@ apiRoutes.get('/get/valve_status/:farm_id', function(req, res) {
   })
 });
 
-apiRoutes.get('/insert/valve_status/:farm_id/:valve_id/:value', function(req, res) {
+apiRoutes.get('/insert/valve_status/:farm_id/:value', function(req, res) {
   var farm_id = parseInt(req.params.farm_id);
-  var valve_id = parseInt(req.params.valve_id);
-  var value = parseFloat(req.params.value);
-  var sql = "UPDATE valve SET status="+value+" WHERE farm_id="+farm_id+" AND valve_id="+valve_id;
-  db.query(sql, function (err, result) {
-    if (err) throw err;
-    res.send('ok');
-  });
+  var value = (req.params.value=="OFF")?0:1;
+  console.log(value);
+  // var sql = "UPDATE valve SET status="+value+" WHERE farm_id="+farm_id+" AND valve_id="+valve_id;
+  influx = new Influx.InfluxDB(perf = {
+   // host: 'localhost',
+   database: 'smartfarm',
+   schema: [
+     {
+       measurement: 'time',
+       fields: {
+         farm: Influx.FieldType.INTEGER,
+        value: Influx.FieldType.INTEGER,
+       },
+       tags: [
+         'host'
+       ]
+     }
+   ]
+  })
+  influx.writePoints([
+    {
+      measurement: 'valve',
+      tags: { "farm": farm_id },
+      fields: {"value": value},
+    }
+  ])
+  .then(result => {
+      res.send("ok")
+  })
 });
 
 // apiRoutes.get('/get/air_temperature/:farm_id/:sensor_id', function(req, res) {

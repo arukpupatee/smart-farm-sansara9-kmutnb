@@ -68,15 +68,14 @@
                $('input[name="valve'+i+'"]').on('switchChange.bootstrapSwitch', function(event, state) {
                  var xhttp2 = new XMLHttpRequest();
                  xhttp2.onreadystatechange = function() {
-                   console.log(this.responseText)
-                   if (this.readyState == 4 && this.status == 204) {
+                   if (this.readyState == 4 && this.status == 200) {
                     if(this.responseText == "ok"){
                       console.log("valve", i, (state?"ON":"OFF"));
                     }
                    }
                  };
-                 xhttp2.open("POST", "http://localhost:8086/write?db=smartfarm", true);
-                 xhttp2.send("valve,farm="+i+" value="+(state?1:0));
+                 xhttp2.open("GET", "api/insert/valve_status/"+i+"/"+(state?"ON":"OFF"), true);
+                 xhttp2.send();
                });
              }
            }
