@@ -29,38 +29,25 @@
       <div class="row align-items-center justify-content-center">
         <div style="color: #000;"><b>แผงควบคุมวาล์วน้ำ</b></div>
         <div id="valve-controls" class="input-group" style="background-color: white; margin: 0px 15px 0px 15px;">
-          <div class="col-sm-3">
+          <div class="col-sm-6">
             <center>
               <div><b>วาล์ว 1</b></div>
               <input type="checkbox" name="valve1"  class="valve-checkbox" data-on-text="เปิด" data-off-text="ปิด" data-on-color="success" data-off-color="danger" checked>
             </center>
           </div>
-          <div class="col-sm-3">
+          <div class="col-sm-6">
             <center>
               <div><b>วาล์ว 2</b></div>
               <input type="checkbox" name="valve2" class="valve-checkbox" data-on-text="เปิด" data-off-text="ปิด" data-on-color="success" data-off-color="danger" checked>
             </center>
           </div>
-          <div class="col-sm-3">
-            <center>
-              <div><b>วาล์ว 3</b></div>
-              <input type="checkbox" name="valve3" class="valve-checkbox" data-on-text="เปิด" data-off-text="ปิด" data-on-color="success" data-off-color="danger" checked>
-            </center>
-          </div>
-          <div class="col-sm-3">
-            <center>
-              <div><b>วาล์ว 4</b></div>
-              <input type="checkbox" name="valve4" class="valve-checkbox" data-on-text="เปิด" data-off-text="ปิด" data-on-color="success" data-off-color="danger" checked>
-            </center>
-          </div>
         </div>
       </div>
     </div>
-
   </center>
   </div>
   <div class="row align-items-center justify-content-center" style="margin: 30px 0px 0px 0px; padding: 0px; width: 100%">
-      <iframe id="graf" src="http://www.sansara9smartfarm.com:3000/dashboard/db/smart-farm?refresh=10s&orgId=1&from=now-15m&to=now" width="1300" height="1250" frameborder="0" style="margin: 0px; padding: 0px;"></iframe>
+      <iframe id="graf" src="http://www.sansara9smartfarm.com:3000/dashboard/db/farm?refresh=10s&orgId=1&from=now-15m&to=now" width="1300" height="1250" frameborder="0" style="margin: 0px; padding: 0px;"></iframe>
   </div>
 <!-- </div> -->
 <!-- </main> -->
@@ -68,10 +55,9 @@
   <script>
     $(document).ready(function(){
       for(let i = 1; i < 5; i++){
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
+        var xhttp1 = new XMLHttpRequest();
+        xhttp1.onreadystatechange = function() {
           if (this.readyState == 4 && this.status == 200) {
-            console.log("asd");
            if(this.responseText == "ON"){
              $('input[name="valve'+i+'"]').bootstrapSwitch('state', true);
            }else{
@@ -80,29 +66,28 @@
            if(i == 4){
              for(let i = 1; i < 5; i++){
                $('input[name="valve'+i+'"]').on('switchChange.bootstrapSwitch', function(event, state) {
-                 var xhttp = new XMLHttpRequest();
-                 xhttp.onreadystatechange = function() {
+                 var xhttp2 = new XMLHttpRequest();
+                 xhttp2.onreadystatechange = function() {
                    if (this.readyState == 4 && this.status == 200) {
                     if(this.responseText == "ok"){
                       console.log("valve", i, (state?"ON":"OFF"));
                     }
                    }
                  };
-                 xhttp.open("GET", "api/insert/valve_status/1/"+i+"/"+(state?1:0), true);
-                 xhttp.send();
+                 xhttp2.open("POST", "http://localhost:8086/write?db=smartfarm", true);
+                 xhttp2.send("valve,farm="+i+" value="+(state?1:0));
                });
              }
            }
           }
         };
-        xhttp.open("GET", "api/get/valve_status/1/"+i, true);
-        xhttp.send();
+        xhttp1.open("GET", "api/get/valve_status/"+i, true);
+        xhttp1.send();
       }
 
       var top = $("#graf").position().top
       var h = $(window).height()
       $("#graf").css('height', h - top)
-      console.log(top, h);
     });
   </script>
 

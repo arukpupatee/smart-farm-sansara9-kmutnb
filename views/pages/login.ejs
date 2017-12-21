@@ -10,7 +10,7 @@
       <h4 style="margin: 20px 0px 20px 0px;">เข้าสู่ระบบสมาชิก</h4>
       <div class="form-group">
         <label for="usr">ชื่อผู้ใช้</label>
-        <input type="text" class="form-control login-text" id="usr" >
+        <input type="text"  class="form-control login-text" id="usr" >
       </div>
       <div class="form-group" >
         <label for="pwd">รหัสผ่าน</label>
@@ -21,28 +21,36 @@
   </center>
 </body>
 <script>
-  $("#login-btn").click(function() {
-    var user = $("#usr").val()
-    var pass = $("#pwd").val()
-    if(user != "" && pass != "") {
-      var xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-          console.log(this.responseText);
-         if(this.responseText == "success"){
-           window.location.reload()
-         }else{
-           alert("ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง")
-         }
-        }
-      };
-      xhttp.open("POST", "login", true);
-      xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      xhttp.send("user="+user+"&pass="+pass);
-    }else{
-      alert("โปรดใส่ชื่อผู้ใช้และรหัสผ่าน")
+    var authen = function() {
+      var user = $("#usr").val()
+      var pass = $("#pwd").val()
+      if(user != "" && pass != "") {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
+           if(this.responseText == "success"){
+             window.location.reload()
+           }else{
+             alert("ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง")
+           }
+          }
+        };
+        xhttp.open("POST", "login", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("user="+user+"&pass="+pass);
+      }else{
+        alert("โปรดใส่ชื่อผู้ใช้และรหัสผ่าน")
+      }
     }
-  })
+
+  $("#login-btn").click(authen)
+  $("input").keypress(function(e) {
+    if(e.which == 13) {
+        alert('You pressed enter!');
+    }
+});
+
 
   $(document).ready(function(){
     var w = screen.width;

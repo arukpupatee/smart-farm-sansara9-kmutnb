@@ -7,7 +7,7 @@ class Users {
     this.db = mysql.createConnection({
       host     : 'localhost',
       user     : 'root',
-      password : 'Sansara@salawin',
+      password : '1234',
       database : 'smartfarm'
     });
   }

@@ -7,6 +7,7 @@ var mysql = require('mysql');
 var passport = require('passport')
 var flash = require('connect-flash')
 var cors = require('cors')
+var Influx = require('influx');
 
 var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var config = require('./config'); // get our config file
@@ -17,6 +18,34 @@ var corsOpt = { "origin": "*",
                 "preflightContinue": true,
                 "optionsSuccessStatus": 204
               }
+
+influx = new Influx.InfluxDB(perf = {
+ host: 'localhost',
+ database: 'smartfarm',
+ schema: [
+   {
+     measurement: 'time',
+     fields: {
+       farm: Influx.FieldType.STRING,
+      //  path: Influx.FieldType.STRING,
+      //  duration: Influx.FieldType.INTEGER
+     },
+     tags: [
+       'host'
+     ]
+   }
+ ]
+})
+
+// type = ['valve']
+// meas = ['Valve Status']
+// Idb = {}
+
+// for(var i in type){
+//   perf.schema[0].measurement = meas[i]
+//   Idb[type[i]] = new Influx.InfluxDB(perf)
+// }
+
 
 app.set('secret', config.secret);
 
@@ -68,7 +97,7 @@ var sess;
 var db = mysql.createConnection({
   host     : '127.0.0.1', //port 3306 for MariaDB
   user     : 'root',
-  password : 'Sansara@salawin',
+  password : '1234',//'Sansara@salawin',
   database : 'smartfarm',
 });
 
@@ -115,6 +144,12 @@ app.post('/login', function(req, res) {
       res.send("failure")
     }
   })
+});
+
+app.post('/logout', function(req, res) {
+  sess = req.session
+  sess.user = undefined
+  res.redirect('/')
 });
 
 // API ROUTES -------------------
@@ -177,20 +212,56 @@ apiRoutes.use(function(req, res, next) {
 */
 
 // add valve
+// influx.query(`
+//   select * from test
+// `)
+// .then(result => {
+//   console.log(result[0].time);
+// })
 
-apiRoutes.get('/get/valve_status/:farm_id/:valve_id', function(req, res) {
+// function getValue(table, farm, sensor, callback){
+//   influx.query("SELECT value FROM " + table + " ORDER BY DESC LIMIT 1")
+//   .then(result => {
+//     callback(result[0].value);
+//   })
+// }
+//
+// function insertValue(db, mea, farm, sensor, val, heap){
+//   db.writePoints([
+//     {
+//       measurement: mea,//'test',
+//       tags: { host: "localhost" },
+//       fields: {"value": val, "farm_id": farm, "sensor_id": sensor, "free_heap": heap},
+//     }
+//   ])
+// }
+
+// apiRoutes.get('/get/valve_status/:farm_id/:valve_id', function(req, res) {
+//   var farm_id = parseInt(req.params.farm_id);
+//   var valve_id = parseInt(req.params.valve_id);
+//   var sql = "SELECT status FROM valve WHERE farm_id="+farm_id+" AND valve_id="+valve_id;
+//   db.query(sql, function (err, result) {
+//     if (err) throw err;
+//     val = result[0].status
+//     if(val == 0){
+//       res.send("OFF");
+//     }else{
+//       res.send("ON");
+//     }
+//   });
+// });
+
+apiRoutes.get('/get/valve_status/:farm_id', function(req, res) {
   var farm_id = parseInt(req.params.farm_id);
-  var valve_id = parseInt(req.params.valve_id);
-  var sql = "SELECT status FROM valve WHERE farm_id="+farm_id+" AND valve_id="+valve_id;
-  db.query(sql, function (err, result) {
-    if (err) throw err;
-    val = result[0].status
-    if(val == 0){
-      res.send("OFF");
-    }else{
-      res.send("ON");
-    }
-  });
+  influx.query("SELECT * FROM valve WHERE farm='"+farm_id+"' ORDER BY DESC LIMIT 1")
+  .then(result => {
+      val = result[0].value
+      if(val == 0){
+        res.send("OFF");
+      }else{
+        res.send("ON");
+      }
+  })
 });
 
 apiRoutes.get('/insert/valve_status/:farm_id/:valve_id/:value', function(req, res) {
@@ -204,17 +275,17 @@ apiRoutes.get('/insert/valve_status/:farm_id/:valve_id/:value', function(req, re
   });
 });
 
-apiRoutes.get('/get/air_temperature/:farm_id/:sensor_id', function(req, res) {
-  var farm_id = parseInt(req.params.farm_id);
-  var sensor_id = parseInt(req.params.sensor_id);
-  //var sql = "INSERT INTO temperature VALUES ("+timestamp+", "+temperature+", 'temperature')";
-  var sql = "SELECT value FROM air_temperature WHERE farm_id="+farm_id+" AND sensor_id="+sensor_id;
-  db.query(sql, function (err, result) {
-    if (err) throw err;
-    val = result[result.length-1].value
-    res.send(val+"");
-  });
-});
+// apiRoutes.get('/get/air_temperature/:farm_id/:sensor_id', function(req, res) {
+//   var farm_id = parseInt(req.params.farm_id);
+//   var sensor_id = parseInt(req.params.sensor_id);
+//   //var sql = "INSERT INTO temperature VALUES ("+timestamp+", "+temperature+", 'temperature')";
+//   var sql = "SELECT value FROM air_temperature WHERE farm_id="+farm_id+" AND sensor_id="+sensor_id;
+//   db.query(sql, function (err, result) {
+//     if (err) throw err;
+//     val = result[result.length-1].value
+//     res.send(val+"");
+//   });
+// });
 
 apiRoutes.get('/insert/air_temperature/:farm_id/:sensor_id/:value', function(req, res) {
   var farm_id = parseInt(req.params.farm_id);
