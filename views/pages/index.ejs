@@ -2,6 +2,7 @@
 <html>
 <head>
   <% include ../partials/header.ejs %>
+  <% include ../../public/stylesheets/main.css %>
 </head>
 
 <!-- <body background="image/background.jpg"> -->
@@ -14,41 +15,63 @@
     border-radius: 20px;
   }
 
+  body {
+    background: #444;
+  }
+
   </style>
   <script>
     window.loadCompleted = false;
   </script>
-
-  <% include ../partials/nav.ejs %>
   <!-- <main class="cd-main-content"> -->
     <!-- <div class="cd-fixed-bg cd-bg-1"> -->
+  <!-- <div class="row align-items-center justify-content-center" style="margin: 30px 0px 0px 0px; padding: 0px; width: 100%"> -->
+  <div class="row" style="margin-top: 230px">
+    <div class='tabs'>
+      <input type='radio' id='overall' name='t' checked>
+      <label class="label" for='overall'>ภาพรวม</label>
+      <input type='radio' id='temp' name='t'>
+      <label class="label" for='temp'>อุณหภูมิ</label>
+      <input type='radio' id='humid' name='t'>
+      <label class="label" for='humid'>ความชื้น</label>
+      <div id='slider'></div>
+    </div>
+  </div>
+  <div style="margin-top: 70px; position: fixed; width: 100%;">
+    <div id="GraCarousel" class="carousel slide" data-ride="carousel">
+      <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+      </ol>
 
-  <div class="jumbotron" style="background-color: transparent;">
-    <center>
-    <div style="width: 90%">
-      <div class="row align-items-center justify-content-center">
-        <div style="color: #000;"><b>แผงควบคุมวาล์วน้ำ</b></div>
-        <div id="valve-controls" class="input-group" style="background-color: white; margin: 0px 15px 0px 15px;">
-          <div class="col-sm-6">
-            <center>
-              <div><b>วาล์ว 1</b></div>
-              <input type="checkbox" name="valve1"  class="valve-checkbox" data-on-text="เปิด" data-off-text="ปิด" data-on-color="success" data-off-color="danger" checked>
-            </center>
-          </div>
-          <div class="col-sm-6">
-            <center>
-              <div><b>วาล์ว 2</b></div>
-              <input type="checkbox" name="valve2" class="valve-checkbox" data-on-text="เปิด" data-off-text="ปิด" data-on-color="success" data-off-color="danger" checked>
-            </center>
-          </div>
+      <div class="carousel-inner">
+        <div id="croverall" class="item active">
+          <iframe id="graf1" src="http://www.sansara9smartfarm.com:3000/dashboard/db/overall?refresh=10s&orgId=1&from=now-15m&to=now" width="100%" height="100%" frameborder="0" style="margin: 0px; padding: 0px;"></iframe>
+        </div>
+
+        <div id="crtemp" class="item">
+          <iframe id="graf2" src="http://www.sansara9smartfarm.com:3000/dashboard/db/temp?refresh=10s&orgId=1&from=now-15m&to=now" width="100%" height="100%" frameborder="0" style="margin: 0px; padding: 0px;"></iframe>
+        </div>
+
+        <div class="item">
+          <iframe id="graf3" src="http://www.sansara9smartfarm.com:3000/dashboard/db/humid?refresh=10s&orgId=1&from=now-15m&to=now" width="100%" height="100%" frameborder="0" style="margin: 0px; padding: 0px;"></iframe>
         </div>
       </div>
+
+      <!-- Left and right controls -->
+      <!-- <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="right carousel-control" href="#myCarousel" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+        <span class="sr-only">Next</span>
+      </a> -->
     </div>
-  </center>
   </div>
-  <div class="row align-items-center justify-content-center" style="margin: 30px 0px 0px 0px; padding: 0px; width: 100%">
-      <iframe id="graf" src="http://www.sansara9smartfarm.com:3000/dashboard/db/farm?refresh=10s&orgId=1&from=now-15m&to=now" width="1300" height="1250" frameborder="0" style="margin: 0px; padding: 0px;"></iframe>
-  </div>
+      <!-- <iframe id="graf" src="http://www.sansara9smartfarm.com:3000/dashboard/db/farm?refresh=10s&orgId=1&from=now-15m&to=now" width="1300" height="1250" frameborder="0" style="margin: 0px; padding: 0px;"></iframe> -->
+  <!-- </div> -->
 <!-- </div> -->
 <!-- </main> -->
 
@@ -85,11 +108,52 @@
         xhttp1.send();
       }
 
-      var top = $("#graf").position().top
+      var top = $("#graf1").position().top
       var h = $(window).height()
-      $("#graf").css('height', h - top)
+      $("#graf1").css('height', h - top)
+      $("#graf2").css('height', h - top)
+      $("#graf3").css('height', h - top)
     });
   </script>
-
+  <!-- <div style=" width: 100%; margin: 0px;"> -->
+    <div id="main-panel" style="background: #444; margin-bottom: 15px; padding 32px 32px 32px 0px;">
+      <center>
+      <div style="width: 90%">
+        <div class="row align-items-center justify-content-center">
+          <div style="color: #fff;"><b>แผงควบคุมวาล์วน้ำ</b></div>
+          <div id="valve-controls" class="input-group" style="background-color: black; margin: 0px 15px 0px 15px; border #000 solid 0px;">
+            <div class="col-sm-6">
+              <center>
+                <div style="color: #fff;"><b>วาล์ว 1</b></div>
+                <input type="checkbox" name="valve1"  class="valve-checkbox" data-on-text="เปิด" data-off-text="ปิด" data-on-color="success" data-off-color="danger" checked>
+              </center>
+            </div>
+            <div class="col-sm-6">
+              <center>
+                <div style="color: #fff;"><b>วาล์ว 2</b></div>
+                <input type="checkbox" name="valve2" class="valve-checkbox" data-on-text="เปิด" data-off-text="ปิด" data-on-color="success" data-off-color="danger" checked>
+              </center>
+            </div>
+          </div>
+        </div>
+      </div>
+    </center>
+    </div>
+    <!-- <div class="row"> -->
+    <!-- </div> -->
+    <script>
+      $("#GraCarousel").carousel({interval: false})
+      $("#overall").change(function(e){
+        $("#GraCarousel").carousel(0);
+      })
+      $("#temp").change(function(e){
+        $("#GraCarousel").carousel(1);
+      })
+      $("#humid").change(function(e){
+        $("#GraCarousel").carousel(2);
+      })
+    </script>
+  <!-- </div> -->
+  <% include ../partials/nav.ejs %>
 </body>
 </html>

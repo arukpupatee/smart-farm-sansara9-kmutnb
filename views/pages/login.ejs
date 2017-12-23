@@ -3,6 +3,11 @@
 <head>
   <% include ../partials/header.ejs %>
 </head>
+<style>
+  body {
+    background: url("/image/bg.jpg") no-repeat center center fixed;
+  }
+</style>
 <body background="image/bg.jpg">
   <center>
     <img id="logo" src="image/Sansara.png">
@@ -10,11 +15,11 @@
       <h4 style="margin: 20px 0px 20px 0px;">เข้าสู่ระบบสมาชิก</h4>
       <div class="form-group">
         <label for="usr">ชื่อผู้ใช้</label>
-        <input type="text"  class="form-control login-text" id="usr" >
+        <input type="text"  class="form-control login-text" style="width: 80%;" id="usr" >
       </div>
       <div class="form-group" >
         <label for="pwd">รหัสผ่าน</label>
-        <input type="password" class="form-control login-text" id="pwd">
+        <input type="password" class="form-control login-text" style="width: 80%;" id="pwd">
       </div>
       <button id="login-btn" class="btn" style="margin: 20px 0px 20px 0px;">เข้าสู่ระบบ</button>
     </div>

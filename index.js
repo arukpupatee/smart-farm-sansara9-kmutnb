@@ -50,7 +50,7 @@ influx = new Influx.InfluxDB(perf = {
 app.set('secret', config.secret);
 
 //app.set('port', (process.env.PORT || 5000));
-app.set('port', 80);
+app.set('port', 5000);
 
 app.use(cors(corsOpt))
 app.use(express.static(__dirname + '/public'));
